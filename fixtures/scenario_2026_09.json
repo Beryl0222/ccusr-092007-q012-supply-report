@@ -1,0 +1,195 @@
+{
+  "schema_version": 2,
+  "record_id": "scenario-2026-09",
+  "domain": "supply_report",
+  "occurred_at": "2026-09-20T09:00:00+08:00",
+  "revision": 1,
+  "source": "脱敏对账情景",
+  "standard_unit": "vial",
+  "window": {
+    "period": "2026-09",
+    "as_of": "2026-09-20T08:00:00+08:00",
+    "deadline": "2026-09-21T18:00:00+08:00"
+  },
+  "unit_rules": [
+    {
+      "rule_id": "box-to-vial",
+      "version": 1,
+      "from_unit": "box",
+      "to_unit": "vial",
+      "factor": "10",
+      "effective_from": "2026-01-01T00:00:00+08:00",
+      "effective_to": "2026-09-30T23:59:59+08:00",
+      "affected_metrics": ["nominal_quantity_std", "available_quantity_std"]
+    },
+    {
+      "rule_id": "box-to-vial",
+      "version": 2,
+      "from_unit": "box",
+      "to_unit": "vial",
+      "factor": "12",
+      "effective_from": "2026-10-01T00:00:00+08:00",
+      "effective_to": null,
+      "affected_metrics": ["nominal_quantity_std", "available_quantity_std"]
+    }
+  ],
+  "subjects": [
+    { "id": "ENT-A", "role": "enterprise", "name": "药企甲", "parent_id": "PARK-X" },
+    { "id": "ENT-B", "role": "enterprise", "name": "药企乙", "parent_id": "PARK-X" },
+    { "id": "PARK-X", "role": "park", "name": "园区X", "parent_id": "REG-1" },
+    { "id": "REG-1", "role": "region", "name": "地区1", "parent_id": null }
+  ],
+  "consignments": [
+    {
+      "consignment_id": "C-001",
+      "drug_id": "DRG-001",
+      "consignor_id": "ENT-A",
+      "consignee_id": "ENT-B",
+      "quantity": "100",
+      "unit": "box",
+      "period": "2026-09"
+    }
+  ],
+  "declarations": [
+    {
+      "declaration_id": "DEC-A",
+      "kind": "entity",
+      "subject_id": "ENT-A",
+      "drug_id": "DRG-001",
+      "submitted_at": "2026-09-20T09:00:00+08:00",
+      "production_roles": [
+        { "relation": "consignor", "counterparty_id": "ENT-B", "consignment_id": "C-001" }
+      ],
+      "batches": [
+        {
+          "batch_id": "b-a-own",
+          "batch_type": "normal",
+          "status": "available",
+          "quantity": "200",
+          "unit": "box",
+          "line_ids": ["A-L1", "A-L2"],
+          "evidence_ids": ["ev-a-ledger"]
+        },
+        {
+          "batch_id": "b-a-consigned",
+          "batch_type": "normal",
+          "status": "available",
+          "quantity": "100",
+          "unit": "box",
+          "consignment_id": "C-001",
+          "role_scope": "consignor",
+          "line_ids": ["A-L3"],
+          "evidence_ids": ["ev-a-consign"]
+        }
+      ]
+    },
+    {
+      "declaration_id": "DEC-A-Q",
+      "kind": "entity",
+      "subject_id": "ENT-A",
+      "drug_id": "DRG-001",
+      "submitted_at": "2026-09-22T10:00:00+08:00",
+      "production_roles": [],
+      "batches": [
+        {
+          "batch_id": "b-a-quarantine",
+          "batch_type": "quarantine",
+          "status": "quarantined",
+          "quantity": "20",
+          "unit": "box",
+          "line_ids": ["A-L1"],
+          "evidence_ids": ["ev-a-qnotice"]
+        }
+      ]
+    },
+    {
+      "declaration_id": "DEC-B",
+      "kind": "entity",
+      "subject_id": "ENT-B",
+      "drug_id": "DRG-001",
+      "submitted_at": "2026-09-20T10:30:00+08:00",
+      "production_roles": [
+        { "relation": "consignee", "counterparty_id": "ENT-A", "consignment_id": "C-001" }
+      ],
+      "batches": [
+        {
+          "batch_id": "b-b-own",
+          "batch_type": "normal",
+          "status": "available",
+          "quantity": "170",
+          "unit": "box",
+          "line_ids": ["B-L1"],
+          "evidence_ids": ["ev-b-ledger"]
+        },
+        {
+          "batch_id": "b-b-consigned",
+          "batch_type": "normal",
+          "status": "available",
+          "quantity": "100",
+          "unit": "box",
+          "consignment_id": "C-001",
+          "role_scope": "consignee",
+          "line_ids": ["B-L2"],
+          "evidence_ids": ["ev-b-consign"]
+        },
+        {
+          "batch_id": "b-b-return",
+          "batch_type": "return_to_stock",
+          "status": "available",
+          "quantity": "30",
+          "unit": "box",
+          "line_ids": ["B-L1"],
+          "evidence_ids": ["ev-b-return"]
+        },
+        {
+          "batch_id": "b-b-quarantine",
+          "batch_type": "quarantine",
+          "status": "quarantined",
+          "quantity": "10",
+          "unit": "box",
+          "line_ids": ["B-L1"],
+          "evidence_ids": ["ev-b-qnotice"]
+        }
+      ]
+    },
+    {
+      "declaration_id": "DEC-PARK",
+      "kind": "aggregate",
+      "subject_id": "PARK-X",
+      "drug_id": "DRG-001",
+      "submitted_at": "2026-09-21T11:00:00+08:00",
+      "rollup": {
+        "covers": ["ENT-A", "ENT-B"],
+        "unit": "vial",
+        "converted_with_rule": "box-to-vial",
+        "converted_with_version": 1,
+        "nominal_quantity_std": "5100",
+        "available_quantity_std": "5000"
+      }
+    },
+    {
+      "declaration_id": "DEC-REG",
+      "kind": "aggregate",
+      "subject_id": "REG-1",
+      "drug_id": "DRG-001",
+      "submitted_at": "2026-09-21T15:00:00+08:00",
+      "rollup": {
+        "covers": ["PARK-X"],
+        "unit": "vial",
+        "converted_with_rule": "box-to-vial",
+        "converted_with_version": 1,
+        "nominal_quantity_std": "6100",
+        "available_quantity_std": "6000"
+      }
+    }
+  ],
+  "evidence": [
+    { "id": "ev-a-ledger", "subject_id": "ENT-A", "kind": "warehouse_ledger", "ref": "A-ledger-20260920" },
+    { "id": "ev-a-consign", "subject_id": "ENT-A", "kind": "consignment_contract", "ref": "C-001/A" },
+    { "id": "ev-a-qnotice", "subject_id": "ENT-A", "kind": "quarantine_notice", "ref": "QN-20260922-07" },
+    { "id": "ev-b-ledger", "subject_id": "ENT-B", "kind": "warehouse_ledger", "ref": "B-ledger-20260920" },
+    { "id": "ev-b-consign", "subject_id": "ENT-B", "kind": "goods_receipt", "ref": "C-001/B" },
+    { "id": "ev-b-return", "subject_id": "ENT-B", "kind": "return_order", "ref": "RT-20260919-03" },
+    { "id": "ev-b-qnotice", "subject_id": "ENT-B", "kind": "quarantine_notice", "ref": "QN-B-20260920-02" }
+  ]
+}

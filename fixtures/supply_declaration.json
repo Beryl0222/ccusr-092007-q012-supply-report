@@ -1,8 +1,54 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "record_id": "sample-012",
   "domain": "supply_report",
   "occurred_at": "2026-09-20T09:00:00+08:00",
   "revision": 1,
-  "source": "业务样例"
+  "source": "业务样例",
+  "subject": {
+    "id": "ENT-A",
+    "role": "enterprise",
+    "name": "药企甲",
+    "parent_id": "PARK-X"
+  },
+  "drug_id": "DRG-001",
+  "window": {
+    "period": "2026-09",
+    "as_of": "2026-09-20T08:00:00+08:00",
+    "deadline": "2026-09-21T18:00:00+08:00"
+  },
+  "production_roles": [
+    {
+      "relation": "consignor",
+      "counterparty_id": "ENT-B",
+      "consignment_id": "C-001"
+    }
+  ],
+  "evidences": [
+    { "id": "ev-a-1", "kind": "warehouse_ledger", "ref": "A-ledger-20260920" },
+    { "id": "ev-a-q", "kind": "quarantine_notice", "ref": "QN-20260922-07" }
+  ],
+  "batches": [
+    {
+      "batch_id": "b-a-own",
+      "batch_type": "normal",
+      "status": "available",
+      "quantity": "200",
+      "unit": "box",
+      "line_ids": ["A-L1", "A-L2"],
+      "evidence_ids": ["ev-a-1"],
+      "submitted_at": "2026-09-20T09:00:00+08:00"
+    },
+    {
+      "batch_id": "b-a-q",
+      "batch_type": "quarantine",
+      "status": "quarantined",
+      "quantity": "20",
+      "unit": "box",
+      "line_ids": ["A-L1"],
+      "evidence_ids": ["ev-a-q"],
+      "submitted_at": "2026-09-22T10:00:00+08:00",
+      "note": "质量隔离，迟于窗口截止时间上报"
+    }
+  ]
 }
