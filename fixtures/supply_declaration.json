@@ -4,5 +4,194 @@
   "domain": "supply_report",
   "occurred_at": "2026-09-20T09:00:00+08:00",
   "revision": 1,
-  "source": "业务样例"
+  "source": "业务样例",
+  "period": "2026-09",
+  "standard_unit": "su",
+  "actors": [
+    { "actor_id": "ent-a", "kind": "pharma", "name": "甲药企（脱敏）", "parent": "park-01" },
+    { "actor_id": "ent-b", "kind": "pharma", "name": "乙药企（脱敏）", "parent": "park-01" },
+    { "actor_id": "park-01", "kind": "park", "name": "示例园区（脱敏）", "parent": "region-01" },
+    { "actor_id": "region-01", "kind": "region", "name": "示例地区（脱敏）", "parent": null }
+  ],
+  "conversion_rules": [
+    {
+      "rule_id": "conv-drug-1-box-su",
+      "drug_id": "drug-1",
+      "from_unit": "box",
+      "to_unit": "su",
+      "factor": 20,
+      "effective_from": "2026-01-01T00:00:00+08:00"
+    }
+  ],
+  "production_relations": [
+    {
+      "relation_id": "rel-1",
+      "type": "entrusted",
+      "drug_id": "drug-1",
+      "delegator": "ent-a",
+      "trustee": "ent-b"
+    }
+  ],
+  "evidence": [
+    { "evidence_id": "ev-a-1", "kind": "inventory_snapshot", "uri": "oss://sample/ev-a-1.pdf" },
+    { "evidence_id": "ev-a-2", "kind": "quality_notice", "uri": "oss://sample/ev-a-2.pdf" },
+    { "evidence_id": "ev-a-3", "kind": "correction_note", "uri": "oss://sample/ev-a-3.pdf" },
+    { "evidence_id": "ev-a-4", "kind": "return_note", "uri": "oss://sample/ev-a-4.pdf" },
+    { "evidence_id": "ev-b-1", "kind": "inventory_snapshot", "uri": "oss://sample/ev-b-1.pdf" },
+    { "evidence_id": "ev-b-2", "kind": "quality_notice", "uri": "oss://sample/ev-b-2.pdf" },
+    { "evidence_id": "ev-p-1", "kind": "aggregation_sheet", "uri": "oss://sample/ev-p-1.pdf" },
+    { "evidence_id": "ev-r-1", "kind": "aggregation_sheet", "uri": "oss://sample/ev-r-1.pdf" }
+  ],
+  "declarations": [
+    {
+      "declaration_id": "decl-ent-a-2026-09",
+      "actor_id": "ent-a",
+      "kind": "original",
+      "submitted_at": "2026-09-20T09:00:00+08:00",
+      "submission_deadline": "2026-09-20T18:00:00+08:00",
+      "window": { "start": "2026-09-01T00:00:00+08:00", "end": "2026-09-19T23:59:59+08:00" },
+      "scope": { "level": "enterprise", "includes_entrusted_out": true },
+      "lines": [
+        {
+          "line_id": "a-1",
+          "drug_id": "drug-1",
+          "qty": 12000,
+          "unit": "box",
+          "inventory_status": "available",
+          "relation_id": "rel-1",
+          "relation_role": "delegator",
+          "evidence": ["ev-a-1"]
+        },
+        {
+          "line_id": "a-2",
+          "drug_id": "drug-1",
+          "qty": 1500,
+          "unit": "box",
+          "inventory_status": "quality_isolated",
+          "evidence": ["ev-a-2"]
+        }
+      ],
+      "production_line_details": [
+        { "line_code": "L1", "drug_id": "drug-1", "qty": 8000, "unit": "box" },
+        { "line_code": "L2", "drug_id": "drug-1", "qty": 4000, "unit": "box" }
+      ]
+    },
+    {
+      "declaration_id": "decl-ent-b-2026-09",
+      "actor_id": "ent-b",
+      "kind": "original",
+      "submitted_at": "2026-09-21T09:00:00+08:00",
+      "submission_deadline": "2026-09-20T18:00:00+08:00",
+      "window": { "start": "2026-09-01T00:00:00+08:00", "end": "2026-09-19T23:59:59+08:00" },
+      "scope": { "level": "enterprise", "includes_entrusted_in": true },
+      "lines": [
+        {
+          "line_id": "b-1",
+          "drug_id": "drug-1",
+          "qty": 12000,
+          "unit": "box",
+          "inventory_status": "available",
+          "relation_id": "rel-1",
+          "relation_role": "trustee",
+          "evidence": ["ev-b-1"]
+        }
+      ]
+    },
+    {
+      "declaration_id": "decl-ent-a-corr-01",
+      "actor_id": "ent-a",
+      "kind": "correction",
+      "supersedes": "decl-ent-a-2026-09",
+      "submitted_at": "2026-09-22T10:00:00+08:00",
+      "submission_deadline": "2026-09-30T18:00:00+08:00",
+      "window": { "start": "2026-09-01T00:00:00+08:00", "end": "2026-09-19T23:59:59+08:00" },
+      "scope": { "level": "enterprise" },
+      "lines": [
+        {
+          "line_id": "a-2",
+          "drug_id": "drug-1",
+          "qty": 1600,
+          "unit": "box",
+          "inventory_status": "quality_isolated",
+          "evidence": ["ev-a-3"]
+        }
+      ]
+    },
+    {
+      "declaration_id": "decl-ent-a-return-01",
+      "actor_id": "ent-a",
+      "kind": "return_to_stock",
+      "submitted_at": "2026-09-23T10:00:00+08:00",
+      "submission_deadline": "2026-09-30T18:00:00+08:00",
+      "window": { "start": "2026-09-01T00:00:00+08:00", "end": "2026-09-19T23:59:59+08:00" },
+      "scope": { "level": "enterprise" },
+      "lines": [
+        {
+          "line_id": "a-3",
+          "drug_id": "drug-1",
+          "qty": 300,
+          "unit": "box",
+          "inventory_status": "available",
+          "evidence": ["ev-a-4"]
+        }
+      ]
+    },
+    {
+      "declaration_id": "decl-ent-b-iso-01",
+      "actor_id": "ent-b",
+      "kind": "quality_isolation",
+      "submitted_at": "2026-09-23T11:00:00+08:00",
+      "submission_deadline": "2026-09-30T18:00:00+08:00",
+      "window": { "start": "2026-09-01T00:00:00+08:00", "end": "2026-09-19T23:59:59+08:00" },
+      "scope": { "level": "enterprise" },
+      "lines": [
+        {
+          "line_id": "b-2",
+          "drug_id": "drug-1",
+          "qty": 500,
+          "unit": "box",
+          "inventory_status": "quality_isolated",
+          "evidence": ["ev-b-2"]
+        }
+      ]
+    },
+    {
+      "declaration_id": "decl-park-2026-09",
+      "actor_id": "park-01",
+      "kind": "original",
+      "submitted_at": "2026-09-21T16:00:00+08:00",
+      "submission_deadline": "2026-09-21T18:00:00+08:00",
+      "window": { "start": "2026-09-01T00:00:00+08:00", "end": "2026-09-19T23:59:59+08:00" },
+      "scope": { "level": "park", "children": ["ent-a", "ent-b"] },
+      "lines": [
+        {
+          "line_id": "p-1",
+          "drug_id": "drug-1",
+          "qty": 240000,
+          "unit": "su",
+          "inventory_status": "available",
+          "evidence": ["ev-p-1"]
+        }
+      ]
+    },
+    {
+      "declaration_id": "decl-region-2026-09",
+      "actor_id": "region-01",
+      "kind": "original",
+      "submitted_at": "2026-09-22T16:00:00+08:00",
+      "submission_deadline": "2026-09-22T18:00:00+08:00",
+      "window": { "start": "2026-09-01T00:00:00+08:00", "end": "2026-09-19T23:59:59+08:00" },
+      "scope": { "level": "region", "children": ["park-01"] },
+      "lines": [
+        {
+          "line_id": "r-1",
+          "drug_id": "drug-1",
+          "qty": 480000,
+          "unit": "su",
+          "inventory_status": "available",
+          "evidence": ["ev-r-1"]
+        }
+      ]
+    }
+  ]
 }
